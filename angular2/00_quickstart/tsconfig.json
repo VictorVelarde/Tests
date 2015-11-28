@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "amd", 
+        "outDir": "", 
+        "sourceMap": true, 
+        "target": "es5"
+    }, 
+    "files": [
+        "app.ts"
+    ]
+}
