@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<ul id='lista'>
+			<li>1º</li>
+		</ul>
+		<!-- -->
+		<script>
+			// ENTER
+			// Dinamismo al vincular datos con nodos
+			d3.select('#lista').selectAll('li')
+				.data([2,4,6]) // 3 datos para solo un nodo inicial
+					.enter() // así que se produce ésta selección para los 2 datos extra
+				.append('li').text(function(d){ return d + 'º'; });
+
+			// UPDATE | ENTER | EXIT: Separación de las 3 selecciones, para mayor claridad
+			// a) Update (seleccionados por defecto)
+			var li = d3.select('#lista').selectAll('li')
+				.data(['a', 'b', 'c', 'd', 'e'])
+					.text(function(d){ return d + ' (yo ya estaba)';}); // aplicable a los que ya había
+			// b) Enter (los nuevos)
+			li.enter().append('li').text(function(d){ return d + ' (SOY NUEVO)'; }); // los nuevos
+			
+			// c) Exit
+			li.exit().remove();
+		</script>
+	</body>
+</html>

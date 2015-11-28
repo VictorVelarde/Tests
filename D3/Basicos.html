@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<script src="http://d3js.org/d3.v3.min.js"></script> 
+		
+	<!-- 
+	Tutorial básico en español:
+	http://gcoch.github.io/D3-tutorial/index.html 
+	-->
+	<script>
+		// DOM dinámico
+		d3.select('body')
+			.append('p')
+			.text('Nuevo párrafo');
+
+		// Asociar datos
+		var datos = [4, 8, 12, 16, 20, 24];
+		var parrafos = d3.select('body')
+			.selectAll('p')
+			.data(datos)
+			.text(function(d){return d;}); // actualizar (por defecto);
+
+		parrafos.enter() // nuevos nodos
+			.append('p')
+			.text(function(d){return d;})
+			.style('color', function(d){
+				if (d > 12) {
+					return 'red';
+				}else{
+					return 'black';
+				}
+			});
+	</script>
+</body>
+</html>

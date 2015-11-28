@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>AIS en OL2</title>
+</head>
+<body onload="init()">
+	<div id="mapa" style="width:100%; height:600px;">		
+	</div>	
+    <!-- OL2 -->
+	<script src="http://dev.openlayers.org/releases/OpenLayers-2.13.1/lib/OpenLayers.js"></script>
+    
+	<script type="text/javascript">
+		var mapa;
+        function init() {
+            // Mapa Base
+            mapa = new OpenLayers.Map({
+                div: "mapa",
+                layers: [new OpenLayers.Layer.OSM("OpenStreetMap")],
+                center: new OpenLayers.LonLat(0, 0),
+                zoom: 1
+            });
+
+            cargarCapaTrayectoria();
+            cargarCapaPosiciones();
+
+            mapa.addControl(new OpenLayers.Control.LayerSwitcher());
+            mapa.zoomToMaxExtent();
+
+        }        
+
+        function cargarCapaTrayectoria(){
+            // Mapa de estilos
+            var estilos = new OpenLayers.StyleMap({
+                "default": {
+                    strokeWidth: 2
+                },
+                "select": {
+                    strokeColor: "#0099cc",
+                    strokeWidth: 4
+                }
+            });
+
+            var unaTrayectoria = new OpenLayers.Layer.Vector("Trayectoria X", {
+                projection: "EPSG:4326",
+                strategies: [new OpenLayers.Strategy.Fixed()],                
+                protocol: new OpenLayers.Protocol.HTTP({
+                    url: "trayectorias_iso.json",
+                    format: new OpenLayers.Format.GeoJSON()
+                }),
+                styleMap: estilos
+            });
+
+            mapa.addLayer(unaTrayectoria);
+        }    
+
+
+        function cargarCapaPosiciones(){
+            /* Referencias
+                http://dev.openlayers.org/examples/styles-rotation.html
+                http://dev.openlayers.org/examples/style-rules.html
+                http://dev.openlayers.org/examples/graphic-name.html
+                http://dev.openlayers.org/examples/styles-context.html
+                */
+
+            // Mapa de estilos
+            var estilos = new OpenLayers.StyleMap({ 
+                "default": new OpenLayers.Style({ 
+                    rotation: "${obtenerRumbo}",  /* feature.attributes.rumbo */
+                    //externalGraphic: "http://dev.openlayers.org/img/marker-gold.png",
+                    fillColor: "${obtenerColor}",
+                    strokeColor: "#808080",
+                    fillOpacity: 1, 
+                    graphicZIndex: 1,
+                    pointRadius: 6,
+                    graphicName: "triangle" //cross triangle
+                },
+                {
+                    context: {
+                        obtenerColor : function (feature){
+                            // En función del tipo de buque... ?
+                            return feature.attributes.nudos > 20 ? '#FC4E2A' :
+                            feature.attributes.nudos > 15 ? '#FD8D3C' :
+                            feature.attributes.nudos > 10 ? '#FEB24C' :
+                            feature.attributes.nudos > 5  ? '#FED976' :
+                            '#FFEDA0' ;
+                        },
+                        obtenerRumbo: function (feature){
+                            // rotación de simbolos = degrees clockwise
+                            // IMPORTANTE: ver orientación 'inicial' del simbolo
+                            desplazamientoSimbolo = 0;
+                            gradosDesdeNorte = (parseFloat(feature.attributes.rumbo) + desplazamientoSimbolo) % 360;
+                            return gradosDesdeNorte;
+                        }
+                    } 
+                })
+            });                
+
+            var unasPosiciones = new OpenLayers.Layer.Vector("Posiciones X", {
+                projection: "EPSG:4326",
+                strategies: [new OpenLayers.Strategy.Fixed()],                
+                protocol: new OpenLayers.Protocol.HTTP({
+                    url: "posiciones_iso.json",
+                    format: new OpenLayers.Format.GeoJSON()
+                }),
+                styleMap: estilos
+            });
+
+            mapa.addLayer(unasPosiciones);
+
+        }
+        </script>
+    </body>
+    </html>

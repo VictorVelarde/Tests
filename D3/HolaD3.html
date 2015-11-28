@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<p>¡Hola D3!</p>
+		<p>La web oficial es http://d3js.org/</p>
+		<p id="tutoriales">Hay bastantes tutoriales sobre la biblioteca (https://github.com/mbostock/d3/wiki/Tutorials), como p.ej. los siguientes</p>
+		<ul>
+			<li>Let's Make a Bar Chart: http://bost.ocks.org/mike/bar/</li>
+			<li>Three Little Circles: http://bost.ocks.org/mike/circles/</li>
+		</ul>
+		<ul id="ejemplos">Y hay muchos ejemplos, en https://github.com/mbostock/d3/wiki/Gallery, como p.ej.:
+			<li>Box Plots: http://bl.ocks.org/mbostock/4061502</li>
+			<li>Bubble Chart: http://bl.ocks.org/mbostock/4063269</li>
+		</ul>
+		<script src="http://d3js.org/d3.v3.min.js"></script> 
+		
+		<!-- -->
+		<script>
+			// 1. SELECCIONES
+			// Selección simple de nodos y modificación de propiedades.
+			// Se usan selectores estándar http://www.w3.org/TR/selectors-api/
+			d3.select('body').style('background-color', 'wheat'); // color de fondo de todo el cuerpo
+			d3.selectAll('p').style('color', 'red'); // color de letra para todos los párrafos
+			
+			// 2. PROPIEDADES DINÁMICAS
+			// a) Aplicación de propiedades mediante una función (sin datos)
+			d3.selectAll('p').style('background-color', function(){
+				return 'hsl(' + Math.random() * 360.0 + ',80%,80%)'; // color de fondo aleatorio a los párrafos
+			});
+			d3.selectAll("#ejemplos li").style("list-style-type", function(d, i) {
+				// d = undefined (no hay dato) | i = índice
+				return i % 2 ? "circle" : "square"; // estilo de viñeta par / impar
+			});
+			
+			// b) Aplicación de propiedades mediante una función (con datos vinculados)
+			d3.selectAll('p')
+				.data([80, 50, 30]) /* datos vinculados a cada nodo de la selección */
+				.style('font-size', function(d){ return d + 'px'; }); /* función que utiliza cada dato */
+	
+			// y una vez 'vinculados', los datos pueden reutilizarse 
+			function reutilizarDatos(){
+				d3.selectAll('p')
+				/*.data([80, 50, 30]) */
+				.style('font-size', function(d){ return d / 2 + 'px'; }); /* función que reutiliza cada dato */
+			}			
+			setTimeout(reutilizarDatos, 2000);
+		</script>
+	</body>
+</html>
