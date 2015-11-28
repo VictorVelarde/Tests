@@ -65,10 +65,10 @@
         }
         mapa.on('click', onMapClick);
         
-        
-        var kml = omnivore.kml('kml/doc.kml').on('ready', function() {
-        mapa.fitBounds(kml.getBounds());
-    }).addTo(mapa);
+        var ruta = 'https://raw.githubusercontent.com/VictorVelarde/Tests/master/Leaftlet/kml/doc.kml';
+        var kml = omnivore.kml(ruta).on('ready', function() {
+            mapa.fitBounds(kml.getBounds());
+        }).addTo(mapa);
         
 	</script>
 	
