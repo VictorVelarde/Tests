@@ -30870,7 +30870,10 @@
   </Style>
   <Style id="IconStyle030">
     <IconStyle>
-      <Icon><href>https://raw.githubusercontent.com/VictorVelarde/Tests/master/Leaflet/kml/Layer0_Symbol_d838d60_0.png</href></Icon>
+      <Icon><href>
+	  https://raw.githubusercontent.com/VictorVelarde/Tests/master/Leaflet/kml/Layer0_Symbol_d838d60_0.png
+	  
+	  </href></Icon>
       <scale>0.625000</scale>
     </IconStyle>
     <LabelStyle>
