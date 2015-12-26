@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+	<style type="text/css">
+		div.bar {
+			display: inline-block;
+        	width: 20px;
+			height: 75px;
+        	background-color: teal;
+			margin-left: 5px;
+		}
+	</style>
+	<!--<div class="bar"></div>-->
+	<script>
+		//var datos = [5, 10, 15, 20, 25];
+
+		var datos = [];
+		for(var i=0; i<=100; i++){
+			var aleatorio = Math.round(Math.random() * 30); 
+			datos.push(aleatorio);
+		}
+	
+		d3.selectAll('div')
+			.data(datos)
+			.enter()
+			.append('div')
+			.attr('class', 'bar')
+			.style('height', function(d){
+				return (d * 5) + 'px';
+			});
+		
+	</script>
+</body>
+</html>

@@ -16,17 +16,15 @@
 		d3.select('body')
 			.append('p')
 			.text('Nuevo párrafo');
-
-		// Asociar datos
+			
+		// Asociar datos		
 		var datos = [4, 8, 12, 16, 20, 24];
 		var parrafos = d3.select('body')
 			.selectAll('p')
 			.data(datos)
-			.text(function(d){return d;}); // actualizar (por defecto);
-
-		parrafos.enter() // nuevos nodos
+			.enter()
 			.append('p')
-			.text(function(d){return d;})
+			.text(function(d){return "Parrafo con el " + d;})
 			.style('color', function(d){
 				if (d > 12) {
 					return 'red';
@@ -34,6 +32,24 @@
 					return 'black';
 				}
 			});
+			
+		// Pequeña prueba		
+		var datos = [40, 80, 120, 160, 200, 240];
+		var divs = d3.select('body')
+			.selectAll('div')
+			.data(datos)
+			.enter()
+			.append('div')
+			.style('background-color', function(d){
+				if (d > 120) {
+					return 'red';
+				}else{
+					return 'black';
+				}
+			})
+			.style('width', function(d){ return d + "px"}
+			)
+			.text('-').style('color', 'white');
 	</script>
 </body>
 </html>

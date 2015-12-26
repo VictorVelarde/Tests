@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SVG</title>
+</head>
+<body>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <!-- Básicos -->
+    <svg width='500' height='400'>
+        <rect x='0' y='0' width='500' height='50'/>
+        <circle cx='50' cy='100' r='25'/>
+        <ellipse cx='100' cy='200' rx='100' ry='25'/>
+        <line x1='150' y1='300' x2='400' y2='100' stroke='black'/>
+        <text x='50' y='350' font-family='sans-serif' font-size='25'>Yap</text>
+    </svg>    
+    <hr/>
+    
+    <!-- SVG con estilos CSS -->
+    <style>
+        svg .conEstilo {
+            fill: yellow;
+            stroke: orange;
+            stroke-width: 5px;
+        }
+    </style>
+    <svg width='500' height='100'>
+        <circle cx='50' cy='50' r='20' class='conEstilo'/>
+    </svg>
+    <hr/>
+    
+    <!-- El último encima -->
+    <svg width='500' height='100'>
+        <rect x="0" y="0" width="30" height="30" fill="purple"/>
+        <rect x="20" y="5" width="30" height="30" fill="blue"/>
+        <rect x="40" y="10" width="30" height="30" fill="green"/>
+        <rect x="60" y="15" width="30" height="30" fill="yellow"/>
+        <rect x="80" y="20" width="30" height="30" fill="red"/>
+    </svg>
+    <hr/>
+    
+    <!-- Transparencia -->
+    <svg width='500' height='100'>
+        <circle cx="25" cy="25" r="20" fill="rgba(128, 0, 128, 1.0)"/>
+        <circle cx="50" cy="25" r="20" fill="rgba(0, 0, 255, 0.75)"/>
+        <circle cx="75" cy="25" r="20" fill="rgba(0, 255, 0, 0.5)"/>
+        <circle cx="100" cy="25" r="20" fill="rgba(255, 255, 0, 0.25)"/>
+        <circle cx="125" cy="25" r="20" fill="rgba(255, 0, 0, 0.1)"/>
+    </svg>
+    
+</body>
+</html>
