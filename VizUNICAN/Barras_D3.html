@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #F7FBFF;
+        }
+        
+        svg {
+            border: 1px black solid;
+        }
+        
+        h1 {
+            font-family: fantasy;
+            font-weight: 100;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Bar chart</h1>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+    <script>
+        // Egresados en la UC en el curso 2014-2015 por carrera y sexo
+        d3.csv('UC_Egresados2014_2015.csv', function (data) {
+
+            // Gráfico SVG
+            var pixelesAncho = 600;
+            var puntoCentral = pixelesAncho / 2;
+            var anchoBarra = 18;
+            var offsetY = 20;
+            var pixelesAlto = data.length * offsetY;
+
+            var svg = d3.select('body')
+                .append('svg')
+                .attr('height', pixelesAlto)
+                .attr('width', pixelesAncho);
+
+
+            // Escala x para tamaño de barras
+            var x = d3.scale
+                .linear()
+                .domain([0, 150])
+                .range([0, puntoCentral]);
+            console.log(x);
+
+            var cMujeres = '#fc8d59';
+            var cHombres = '#74a9cf';
+
+            // Dibujado por carrera
+            data.forEach(function (d) {
+                dibujado(d);
+            });
+
+            function dibujado(carrera) {
+                // Ranking;Carrera;Hombres;Mujeres;Categoria
+                var ranking = parseInt(carrera.Ranking);
+                var h = parseInt(carrera.Hombres);
+                var m = parseInt(carrera.Mujeres);
+
+                svg.append('rect')
+                    .attr('x', puntoCentral)
+                    .attr('y', ranking * offsetY)
+                    .attr('width', x(m))
+                    .attr('height', anchoBarra)
+                    .attr('fill', cMujeres);
+                // hombres
+                svg.append('rect')
+                    .attr('x', puntoCentral - x(h))
+                    .attr('y', carrera.Ranking * offsetY)
+                    .attr('width', x(h))
+                    .attr('height', anchoBarra)
+                    .attr('fill', cHombres);
+            }
+
+        });
+    </script>
+</body>
+
+</html>

@@ -7,3 +7,6 @@ http://web.unican.es/estudios/Documents/SGA/Estad%C3%ADsticas/Estad%C3%ADsticas%
 ## 2. Conversión rápida a Excel
 https://pdftables.com
 
+## 3. Pruebas de visualización en el propio Excel
+
+

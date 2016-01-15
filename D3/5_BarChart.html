@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <h1>Bar chart</h1>
+    <!--
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+    -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+
+    </script>
+    <script>
+        // GRAFICO SVG
+        var pixelesAlto = 300;
+        var pixelesAncho = 600;
+
+        var svg = d3.select('body')
+            .append('svg')
+            .attr('height', pixelesAlto)
+            .attr('widht', pixelesAncho)
+            .style('border', '1px black solid');
+
+
+        // ESCALAS        
+        var x = d3.scale
+            .linear
+            .domain([250, 100000])
+            .range([0, pixelesAncho]);
+        console.log(x);
+
+        // Esperanza de vida (15 a 90 años)
+        var y = d3.scale
+            .linear()
+            .domain([15, 90])
+            .range([pixelesAlto, 0]); // el y-min = top
+        console.log(y);
+
+
+        // Dibujado de China
+        var renta = 8347.0;
+        var esperanza = 75.0;
+        svg.append('circle')
+            .attr('r', 10)
+            .attr('fill', 'red')
+            .attr('cx', x(renta))
+            .attr('cy', y(esperanza));
+    </script>
+</body>
+
+</html>
