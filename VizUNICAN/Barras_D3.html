@@ -2,15 +2,28 @@
 
 <head>
     <meta charset="utf-8">
+
     <style>
+        /** General */
+        
+        h1 {
+            font-family: 'Dosis', sans-serif;
+            font-weight: 400;
+            line-height: 46px;
+            font-size: 40px;
+            margin: 0 0 23px 0;
+            color: #E50275;
+        }
+        
         body {
+            font-family: 'Open Sans', sans-serif;
             background-color: #F7FBFF;
         }
-        /* Estilos del gráfico */
-        
-        svg.grafico {
+        /** Estilos del gráfico */
+        /*
+        .grafico {
             border: 1px black solid;
-        }
+        }*/
         
         .grafico text {
             fill: black;
@@ -40,108 +53,127 @@
             text-anchor: start;
             font-size: 14px;
         }
-        
-        h1 {
-            font-family: 'Dosis', sans-serif;
-            font-weight: 400;
-            line-height: 46px;
-            font-size: 40px;
-            margin: 0 0 23px 0;
-            color: #E50275;
-        }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-        }
     </style>
 
     <!-- Fuentes -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans|Dosis:400,800" rel="stylesheet" type="text/css" />
 
+
 </head>
 
 <body>
+
     <h1>Egresados en Estudios de Grado (UC 2014/2015)</h1>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
-    <script>
-        // Egresados en la UC en el curso 2014-2015 por carrera y sexo
-        d3.csv('UC_Egresados2014_2015.csv', function (data) {
 
-            // Gráfico SVG
-            var pixelesAncho = 900;
-            var puntoCentral = pixelesAncho / 3;
-            var puntoCarreras = puntoCentral * 2 - 50;
-            var anchoBarra = 18;
-            var offsetY = 20;
-            var pixelesAlto = data.length * offsetY + 50;
+    <div id="grafico">
+        <svg></svg>
+    </div>
+    <div id="botonera">
+        <button class="btn btn-default" onclick="grafico('TOTAL');">Total</button>
+        <button class="btn btn-primary" onclick="grafico('HOMBRES');">Hombres</button>
+        <button class="btn btn-primary" onclick="grafico('MUJERES');">Mujeres</button>
 
-            var svg = d3.select('body')
-                .append('svg')
-                .attr('height', pixelesAlto)
-                .attr('width', pixelesAncho)
-                .attr('class', 'grafico');
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
 
+        <script>
+            var data = [];
 
-            // Escala x para tamaño de barras
-            var x = d3.scale
-                .linear()
-                .domain([0, 150])
-                .range([0, puntoCentral]);
-            console.log(x);
-
-            // Dibujado por carrera
-            data.forEach(function (d) {
-                dibujado(d);
+            /** Egresados en la UC en el curso 2014-2015 por carrera y sexo */
+            d3.csv('UC_Egresados2014_2015.csv', function (datosCSV) {
+                datosCSV.forEach(function (carrera) {
+                    // Ranking;Carrera;Hombres;Mujeres;Categoria
+                    data.push({
+                        r: parseInt(carrera.Ranking),
+                        c: carrera.Carrera,
+                        h: parseInt(carrera.Hombres),
+                        m: parseInt(carrera.Mujeres)
+                    })
+                });
+                grafico('TOTAL');
             });
 
-            function dibujado(carrera) {
-                // Ranking;Carrera;Hombres;Mujeres;Categoria
-                var r = parseInt(carrera.Ranking);
-                var c = carrera.Carrera;
-                var h = parseInt(carrera.Hombres);
-                var m = parseInt(carrera.Mujeres);
+            /** Pirámide de egresados */
+            function grafico(ordenacion) {
+                if (ordenacion) {
+                    data = data.sort(function (a, b) {
+                        switch (ordenacion) {
+                        case "TOTAL":
+                            return d3['ascending'](a.r, b.r);
+                        case "HOMBRES":
+                            return d3['descending'](a.h, b.h);
+                        case "MUJERES":
+                            return d3['descending'](a.m, b.m);
+                        }
+                    });
+                }
 
-                var espacioEtiquetasX = 5;
-                var espacioEtiquetasY = 15;
+                // Gráfico SVG
+                var pixelesAncho = 900;
+                var puntoCentral = pixelesAncho / 3;
+                var puntoCarreras = puntoCentral * 2 - 50;
+                var anchoBarra = 18;
+                var offsetY = 20;
+                var pixelesAlto = data.length * offsetY + 50;
 
-                // barra mujeres
-                svg.append('rect')
-                    .attr('x', puntoCentral)
-                    .attr('y', r * offsetY)
-                    .attr('width', x(m))
-                    .attr('height', anchoBarra)
-                    .attr('class', 'barraMujeres');
-                svg.append('text')
-                    .attr('x', puntoCentral + espacioEtiquetasX)
-                    .attr('y', (r * offsetY) + espacioEtiquetasY)
-                    .attr('class', 'etiquetaMujeres')
-                    .text(m);
+                var svg = d3.select('#grafico svg')
+                    .attr('height', pixelesAlto)
+                    .attr('width', pixelesAncho)
+                    .attr('class', 'grafico');
+                d3.selectAll("svg > *").remove();
 
-                // barra hombres
-                svg.append('rect')
-                    .attr('x', puntoCentral - x(h))
-                    .attr('y', r * offsetY)
-                    .attr('width', x(h))
-                    .attr('height', anchoBarra)
-                    .attr('class', 'barraHombres');
-                svg.append('text')
-                    .attr('x', puntoCentral - espacioEtiquetasX)
-                    .attr('y', (r * offsetY) + espacioEtiquetasY)
-                    .attr('class', 'etiquetaHombres')
-                    .text(h);
+                // Escala x para tamaño de barras
+                var x = d3.scale
+                    .linear()
+                    .domain([0, 150])
+                    .range([0, puntoCentral]);
 
-                // carrera
-                var txt = r + ". " + c;
-                svg.append('text')
-                    .attr('x', puntoCarreras + espacioEtiquetasX)
-                    .attr('y', (r * offsetY) + espacioEtiquetasY)
-                    .attr('class', 'etiquetaCarrera')
-                    .text(txt);
+                // Dibujado por carrera
+                data.forEach(function (d, i) {
+                    dibujarCarrera(d, i);
+                });
+
+                function dibujarCarrera(c, posicion) {
+                    var espacioEtiquetasX = 5;
+                    var espacioEtiquetasY = 15;
+
+                    // barra mujeres
+                    svg.append('rect')
+                        .attr('x', puntoCentral)
+                        .attr('y', posicion * offsetY)
+                        .attr('width', x(c.m))
+                        .attr('height', anchoBarra)
+                        .attr('class', 'barraMujeres');
+                    svg.append('text')
+                        .attr('x', puntoCentral + espacioEtiquetasX)
+                        .attr('y', (posicion * offsetY) + espacioEtiquetasY)
+                        .attr('class', 'etiquetaMujeres')
+                        .text(c.m);
+
+                    // barra hombres
+                    svg.append('rect')
+                        .attr('x', puntoCentral - x(c.h))
+                        .attr('y', posicion * offsetY)
+                        .attr('width', x(c.h))
+                        .attr('height', anchoBarra)
+                        .attr('class', 'barraHombres');
+                    svg.append('text')
+                        .attr('x', puntoCentral - espacioEtiquetasX)
+                        .attr('y', (posicion * offsetY) + espacioEtiquetasY)
+                        .attr('class', 'etiquetaHombres')
+                        .text(c.h);
+
+                    // carrera
+                    var txt = c.r + ". " + c.c;
+                    svg.append('text')
+                        .attr('x', puntoCarreras + espacioEtiquetasX)
+                        .attr('y', (posicion * offsetY) + espacioEtiquetasY)
+                        .attr('class', 'etiquetaCarrera')
+                        .text(txt);
+                }
+
             }
-
-        });
-    </script>
+        </script>
 </body>
 
 </html>
